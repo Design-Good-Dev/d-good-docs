@@ -1,0 +1,8 @@
+# Prerequisites
+# Python 3.8+
+# ffmpeg (brew install ffmpeg on macOS)
+
+discord.py[voice]
+discord-ext-voice-recv
+PyNaCl
+python-dotenv

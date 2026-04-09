@@ -1,0 +1,19 @@
+# API Keys and Secrets
+.env
+automation/.env
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+env/
+venv/
+ENV/
+
+# Audio Files
+*.wav
+*.mp3
+
+# OS files
+.DS_Store
