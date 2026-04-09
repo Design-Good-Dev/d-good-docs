@@ -51,7 +51,7 @@ async def start(ctx):
 async def stop(ctx):
     if ctx.voice_client and ctx.voice_client.is_listening():
         ctx.voice_client.stop_listening()
-        await ctx.send("⏹️ 녹음을 중지했습니다. 파일을 클로바 노트에 업로드하세요.")
+        await ctx.send("⏹️ 녹음을 중지했습니다. 파일을 **디글루(D-gle)**에 업로드하여 요약 결과를 생성하세요.")
     else:
         await ctx.send("❌ 현재 녹음 중이 아닙니다.")
 

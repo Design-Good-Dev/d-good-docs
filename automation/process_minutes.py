@@ -33,25 +33,9 @@ def generate_minutes(clova_text_path, agenda, attendees):
 
 ---
 
-## 💬 논의 내용
+## 💬 논의 내용 (by D-gle)
 
 {content}
-
----
-
-## 🌈 4Ls 회고 (by 주희)
-
-### 👍 Liked (좋았던 점)
-- 
-
-### 🎓 Learned (배운 점)
-- 
-
-### 💧 Lacked (아쉬운 점)
-- 
-
-### 🎯 Longed for (바라는 점 / 액션 아이템)
-- 
 
 ---
 
@@ -60,6 +44,9 @@ def generate_minutes(clova_text_path, agenda, attendees):
 
 ## 🚀 향후 할 일 (To-Do)
 - [ ] 
+
+## 🌈 Retrospective
+> 💡 개인 회고는 [Retrospectives/](../Retrospectives/) 폴더에서 별도로 작성해 주세요.
 
 ## 🗓️ 다음 회의 일정
 - 
