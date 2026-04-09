@@ -8,6 +8,19 @@ from dotenv import load_dotenv
 # .env 파일 로드
 load_dotenv()
 
+# 수동으로 빌드한 Opus 라이브러리 및 ffmpeg 경로 설정
+OPUS_PATH = os.path.join(os.path.dirname(__file__), "bin/opus-1.4/dist/lib/libopus.dylib")
+FFMPEG_PATH = os.path.join(os.path.dirname(__file__), "bin")
+
+# 환경 변수에 ffmpeg 경로 추가
+os.environ["PATH"] += os.pathsep + FFMPEG_PATH
+
+try:
+    discord.opus.load_opus(OPUS_PATH)
+    print(f"✅ Opus 라이브러리 로드 성공: {OPUS_PATH}")
+except Exception as e:
+    print(f"⚠️ Opus 로드 실패 (시스템 기본값 시도): {e}")
+
 # 봇 설정
 intents = discord.Intents.default()
 intents.message_content = True
@@ -16,6 +29,7 @@ bot = commands.Bot(command_prefix='!', intents=intents)
 @bot.event
 async def on_ready():
     print(f'✅ 디스코드 봇 로그인 성공: {bot.user.name}')
+    print(f'참여 중인 서버 목록: {[guild.name for guild in bot.guilds]}')
     print('------')
     print('사용 가능 명령어:')
     print('!join  - 봇을 음성 채널로 초대')
