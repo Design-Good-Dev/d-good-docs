@@ -52,14 +52,14 @@ async def join(ctx):
     if ctx.author.voice:
         channel = ctx.author.voice.channel
         try:
-            # 타임아웃을 늘리고 안정적인 접속 시도
-            await channel.connect(cls=VoiceRecvClient, timeout=20.0, self_deaf=True)
-            await ctx.send(f"🎤 {channel.name} 채널에 성공적으로 접속했습니다!")
+            # 가장 기본적인 연결 시도 (부가 옵션 제거)
+            await channel.connect(cls=VoiceRecvClient)
+            await ctx.send(f"🎤 {channel.name} 접속 시도 성공!")
         except Exception as e:
-            await ctx.send(f"❌ 음성 채널 접속 중 오류 발생: {e}")
-            print(f"Connection Error: {e}")
+            await ctx.send(f"❌ 접속 실패: {e}")
+            print(f"Simple Connect Error: {e}")
     else:
-        await ctx.send("❌ 먼저 음성 채널에 참여해 주세요!")
+        await ctx.send("❌ 음성 채널에 먼저 들어가 주세요!")
 
 @bot.command()
 async def start(ctx):
