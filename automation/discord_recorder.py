@@ -1,25 +1,35 @@
 import discord
 from discord.ext import commands
-from discord.ext.voice_recv import VoiceRecvClient, WaveSink
+try:
+    from discord.ext.voice_recv import VoiceRecvClient, WaveSink
+except ImportError:
+    print("⚠️ VoiceRecvClient를 불러올 수 없습니다. 라이브러리 설치를 확인해주세요.")
+
 import os
 from datetime import datetime
 from dotenv import load_dotenv
+import ctypes
 
 # .env 파일 로드
 load_dotenv()
 
 # 수동으로 빌드한 Opus 라이브러리 및 ffmpeg 경로 설정
-OPUS_PATH = os.path.join(os.path.dirname(__file__), "bin/opus-1.4/dist/lib/libopus.dylib")
-FFMPEG_PATH = os.path.join(os.path.dirname(__file__), "bin")
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+OPUS_PATH = os.path.join(BASE_DIR, "bin/opus-1.4/dist/lib/libopus.dylib")
+FFMPEG_PATH = os.path.join(BASE_DIR, "bin")
 
 # 환경 변수에 ffmpeg 경로 추가
 os.environ["PATH"] += os.pathsep + FFMPEG_PATH
 
+# 라이브러리 로드 시도 (ctypes로 직접 확인 후 로드)
 try:
-    discord.opus.load_opus(OPUS_PATH)
-    print(f"✅ Opus 라이브러리 로드 성공: {OPUS_PATH}")
+    if os.path.exists(OPUS_PATH):
+        discord.opus.load_opus(OPUS_PATH)
+        print(f"✅ Opus 라이브러리 로드 성공: {OPUS_PATH}")
+    else:
+        print(f"❌ Opus 라이브러리 파일이 존재하지 않습니다: {OPUS_PATH}")
 except Exception as e:
-    print(f"⚠️ Opus 로드 실패 (시스템 기본값 시도): {e}")
+    print(f"⚠️ Opus 로드 실패: {e}")
 
 # 봇 설정
 intents = discord.Intents.default()
@@ -41,8 +51,13 @@ async def on_ready():
 async def join(ctx):
     if ctx.author.voice:
         channel = ctx.author.voice.channel
-        await channel.connect(cls=VoiceRecvClient)
-        await ctx.send(f"🎤 {channel.name} 채널에 접속했습니다.")
+        try:
+            # 타임아웃을 늘리고 안정적인 접속 시도
+            await channel.connect(cls=VoiceRecvClient, timeout=20.0, self_deaf=True)
+            await ctx.send(f"🎤 {channel.name} 채널에 성공적으로 접속했습니다!")
+        except Exception as e:
+            await ctx.send(f"❌ 음성 채널 접속 중 오류 발생: {e}")
+            print(f"Connection Error: {e}")
     else:
         await ctx.send("❌ 먼저 음성 채널에 참여해 주세요!")
 
